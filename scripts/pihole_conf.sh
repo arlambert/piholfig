@@ -8,27 +8,29 @@ PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 STEPOK="[\e[32m ✔ \e[0m]"
 STEPNO="[\e[31m X \e[0m]"
-STEPDOT="[\e[37m X \e[0m]"
+STEPDOT="[\e[1m...\e[0m]"
 
 #==========| initial Intro |==========
 
 set -e
 
+echo -e "\n"
 echo -e " ${STEPDOT} \e[1m This script will update all PiHole lists based on the public config \e[0m"
-sleep 1
+sleep 2
 echo -e "\n"
 
 #==========| Check Permission |==========
 
 if [ "$(id -u)" != "0" ] ; then
 	echo -e " ${STEPDNO} \e[31m This script requires root permissions. Please run this as root! \e[0m"
+  echo -e "\n"
 	exit 2
 fi
 
 #==========| Check Gawk Installation |==========
 
 if ! (which gawk > /dev/null); then
-  echo -e " ${STEPDOT} \e[32m Installing gawk... \e[0m"
+  echo -e " ${STEPDOT} \e[1m Installing gawk... \e[0m"
   if (which apt-get > /dev/null); then
        apt-get install gawk -qq > /dev/null
   elif (which pacman > /dev/null); then
@@ -37,17 +39,17 @@ if ! (which gawk > /dev/null); then
        dnf install gawk > /dev/null
   fi
   wait
-  echo -e " ${STEPOK} \e[32m Finished \e[0m"
+  echo -e " ${STEPOK} \e[32m Gawk Installed \e[0m"
 fi
 
 #==========| Whitelist Domains |==========
 
 curl -sS https://raw.githubusercontent.com/arlambert/domain/whitelist.txt | sudo tee -a /etc/pihole/whitelist.txt >/dev/null
-echo -e " ${STEPOK} \e[32m Adding to whitelist... \e[0m"
+echo -e " ${STEPDOT} \e[1m Adding to whitelist... \e[0m"
 sleep 0.5
 
 sudo gawk -i inplace '!a[$0]++' /etc/pihole/whitelist.txt
-echo -e " ${STEPOK} \e[32m Removing duplicates... \e[0m"
+echo -e " ${STEPDOT} \e[1m Removing duplicates... \e[0m"
 wait
 
 echo -e " ${STEPOK} \e[32m Whitelist Updated! \e[0m"
@@ -56,24 +58,22 @@ echo -e " ${STEPOK} \e[32m Whitelist Updated! \e[0m"
 
 # Get the updated adlists.list and update pihole
 curl -sS "https://v.firebog.net/hosts/lists.php?type=nocross" | sudo tee -a /etc/pihole/adlist.list >/dev/null
-echo -e " ${STEPOK} \e[32m Updating ADList... \e[0m"
+echo -e " ${STEPDOT} \e[1m Updating ADList... \e[0m"
 sleep 0.5
 
 sudo gawk -i inplace '!a[$0]++' /etc/pihole/adlist.list
-echo -e " ${STEPOK} \e[32m Removing duplicates... \e[0m"
+echo -e " ${STEPDOT} \e[1m Removing duplicates... \e[0m"
 wait
 
 echo -e " ${STEPOK} \e[32m ADlist Updated! \e[0m"
 
 #==========| Updating Gravity |==========
 
-echo -e " ${STEPDOT} \e[32m Pi-hole gravity rebuilding lists. This may take a while... \e[0m"
+echo -e " ${STEPDOT} \e[1m Pi-hole gravity rebuilding lists. This may take a while... \e[0m"
 pihole -g > /dev/null
 wait
 echo -e " ${STEPOK} \e[32m Pi-hole's gravity updated! \e[0m"
 
 #==========| Finish |==========
-echo -e " ${STEPOK} \e[32m Done \e[0m"
-
-echo -e " \e[1m Created by GiggMaster - Hope you enjoy \e[0m"
+echo -e " ${STEPOK} \e[32m Script Done! \e[0m"
 echo -e "\n\n"
