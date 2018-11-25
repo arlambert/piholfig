@@ -47,7 +47,7 @@ if ! (which gawk > /dev/null); then
 fi
 
 #==========| Whitelist Domains |==========
-
+rm /etc/pihole/whitelist.txt
 curl -sS https://raw.githubusercontent.com/arlambert/piholfig/master/scripts/whitelist.txt | sudo tee -a /etc/pihole/whitelist.txt >/dev/null
 echo -e " ${STEPDOT} \e[1m Adding to whitelist... \e[0m"
 sleep 0.5
