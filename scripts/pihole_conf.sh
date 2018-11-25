@@ -1,50 +1,79 @@
 #!/usr/bin/env bash
 
-set -e
+#==========| List of Variables |==========
 
 RUN_UUID=$(cat /proc/sys/kernel/random/uuid)
 
 PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-PIHOLE_BIN="${PIHOLE_BIN:-/usr/local/bin/pihole}"
 
-ADLIST_LIST_DEST="${ADLIST_LIST_DEST:-/etc/pihole/adlists.list}"
-WHITELIST_FILE="${WHITELIST_FILE:-whitelist.txt}"
-ADLIST_LIST_ADDONS_FILE="${ADLIST_LIST_ADDONS_FILE:-adlists.addon.txt}"
-DRY_RUN="${DRY_RUN:-0}"
+STEPOK="[\e[32m ✔ \e[0m]"
+STEPNO="[\e[31m X \e[0m]"
+STEPDOT="[\e[37m X \e[0m]"
 
-echo "*** Starting run $RUN_UUID ***"
+#==========| initial Intro |==========
 
-# Whitelist domains
-# We do one by one, because if we join a string of domains (space seperated) and
-# there's an error in one of the lines in whitelist_domains the whole thing will fail.
-# It should take long only on first run, after that it'll say that domain already exists.
-echo "Reading whitelist domains from $WHITELIST_FILE"
-while IFS= read -r line
-do
-  [[ "$line" =~ ^#.*$ ]] || [[ "$line" = "" ]] && continue
-  [[ "$DRY_RUN" -eq "0" ]] && "$PIHOLE_BIN" -w "$line"
-done < "$WHITELIST_FILE"
+set -e
 
+echo " \e[1m This script will update all PiHole lists based on the public config \e[0m"
+sleep 1
+echo -e "\n"
 
-tmp_adlists_list=$(mktemp)
+#==========| Check Permission |==========
+
+if [ "$(id -u)" != "0" ] ; then
+	echo -e " ${STEPDNO} \e[31m This script requires root permissions. Please run this as root! \e[0m"
+	exit 2
+fi
+
+#==========| Check Gawk Installation |==========
+
+if ! (which gawk > /dev/null); then
+  echo -e " ${STEPDOT} \e[32m Installing gawk... \e[0m"
+  if (which apt-get > /dev/null); then
+       apt-get install gawk -qq > /dev/null
+  elif (which pacman > /dev/null); then
+       pacman -Sqy gawk > /dev/null
+  elif (which dnf > /dev/null); then
+       dnf install gawk > /dev/null
+  fi
+  wait
+  echo -e " ${STEPOK} \e[32m Finished \e[0m"
+fi
+
+#==========| Whitelist Domains |==========
+
+curl -sS https://raw.githubusercontent.com/arlambert/domain/whitelist.txt | sudo tee -a /etc/pihole/whitelist.txt >/dev/null
+echo -e " ${STEPOK} \e[32m Adding to whitelist... \e[0m"
+sleep 0.5
+
+sudo gawk -i inplace '!a[$0]++' /etc/pihole/whitelist.txt
+echo -e " ${STEPOK} \e[32m Removing duplicates... \e[0m"
+wait
+
+echo -e " ${STEPOK} \e[32m Whitelist Updated! \e[0m"
+
+#==========| ADLists |==========
 
 # Get the updated adlists.list and update pihole
-curl -sL "https://v.firebog.net/hosts/lists.php?type=nocross" -o "$tmp_adlists_list"
+curl -sS "https://v.firebog.net/hosts/lists.php?type=nocross" | sudo tee -a /etc/pihole/adlist.list >/dev/null
+echo -e " ${STEPOK} \e[32m Updating ADList... \e[0m"
+sleep 0.5
 
-# Add the lists from the addons
+sudo gawk -i inplace '!a[$0]++' /etc/pihole/adlist.list
+echo -e " ${STEPOK} \e[32m Removing duplicates... \e[0m"
+wait
 
-echo "Reading additional adlists from $ADLIST_LIST_ADDONS_FILE"
-while IFS= read -r line
-do
-  [[ "$line" =~ ^#.*$ ]] || [[ "$line" = "" ]] && continue
-  echo "$line" >> "$tmp_adlists_list"
-done < "$ADLIST_LIST_ADDONS_FILE"
+echo -e " ${STEPOK} \e[32m ADlist Updated! \e[0m"
 
-echo "Replacing $ADLIST_LIST_DEST with a new adlist.list file"
-install -m 744 "$tmp_adlists_list" "$ADLIST_LIST_DEST"
-rm "$tmp_adlists_list"
+#==========| Updating Gravity |==========
 
-echo "Updating gravity"
-[[ "$DRY_RUN" -eq "0" ]] && "$PIHOLE_BIN" -g
+echo -e " ${STEPDOT} \e[32m Pi-hole gravity rebuilding lists. This may take a while... \e[0m"
+pihole -g > /dev/null
+wait
+echo -e " ${STEPOK} \e[32m Pi-hole's gravity updated! \e[0m"
 
-echo "*** Finished run $RUN_UUID ***"
+#==========| Finish |==========
+echo -e " ${STEPOK} \e[32m Done \e[0m"
+
+echo -e " \e[1m Created by GiggMaster - Hope you enjoy \e[0m"
+echo -e "\n\n"
