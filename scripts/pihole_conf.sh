@@ -1,3 +1,8 @@
+#==========| Intro |==========
+# Author: GiggMaster
+# Release : v1.00
+#=============================
+
 #!/usr/bin/env bash
 
 #==========| List of Variables |==========
@@ -17,7 +22,6 @@ set -e
 echo -e "\n"
 echo -e " ${STEPDOT} \e[1m This script will update all PiHole lists based on the public config \e[0m"
 sleep 2
-echo -e "\n"
 
 #==========| Check Permission |==========
 
