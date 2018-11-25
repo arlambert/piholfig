@@ -14,7 +14,7 @@ STEPDOT="[\e[37m X \e[0m]"
 
 set -e
 
-echo " \e[1m This script will update all PiHole lists based on the public config \e[0m"
+echo -e " ${STEPDOT} \e[1m This script will update all PiHole lists based on the public config \e[0m"
 sleep 1
 echo -e "\n"
 
