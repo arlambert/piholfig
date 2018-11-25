@@ -44,7 +44,7 @@ fi
 
 #==========| Whitelist Domains |==========
 
-curl -sS https://raw.githubusercontent.com/arlambert/domain/whitelist.txt | sudo tee -a /etc/pihole/whitelist.txt # >/dev/null
+curl -sS https://raw.githubusercontent.com/arlambert/piholfig/master/scripts/whitelist.txt | sudo tee -a /etc/pihole/whitelist.txt # >/dev/null
 echo -e " ${STEPDOT} \e[1m Adding to whitelist... \e[0m"
 sleep 0.5
 
@@ -70,7 +70,7 @@ echo -e " ${STEPOK} \e[32m ADlist Updated! \e[0m"
 #==========| Updating Gravity |==========
 
 echo -e " ${STEPDOT} \e[1m Pi-hole gravity rebuilding lists. This may take a while... \e[0m"
-pihole -g > # /dev/null
+pihole -g > #/dev/null
 wait
 echo -e " ${STEPOK} \e[32m Pi-hole's gravity updated! \e[0m"
 
