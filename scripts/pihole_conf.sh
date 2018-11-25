@@ -8,8 +8,8 @@ PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 PIHOLE_BIN="${PIHOLE_BIN:-/usr/local/bin/pihole}"
 
 ADLIST_LIST_DEST="${ADLIST_LIST_DEST:-/etc/pihole/adlists.list}"
-WHITELIST_FILE="${WHITELIST_FILE:-../domains/whitelist}"
-ADLIST_LIST_ADDONS_FILE="${ADLIST_LIST_ADDONS_FILE:../domains/adlists.addon}"
+WHITELIST_FILE="${WHITELIST_FILE:-~/piholfig/domains/whitelist}"
+ADLIST_LIST_ADDONS_FILE="${ADLIST_LIST_ADDONS_FILE:~/piholfig/domains/adlists.addon}"
 DRY_RUN="${DRY_RUN:-0}"
 
 echo "*** Starting run $RUN_UUID ***"
