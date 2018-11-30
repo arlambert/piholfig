@@ -1,3 +1,8 @@
+# Shorten Sites
+t.co
+youtu.be
+bit.ly
+
 # Google Maps and other Google services
 clients1.google.com
 clients2.google.com
@@ -203,10 +208,6 @@ v20.vortex-win.data.microsoft.com
 # Ali Express
 ae01.alicdn.com
 
-# Shorten Sites
-t.co
-youtu.be
-bit.ly
 
 # Google
 ssl.gstatic.com
