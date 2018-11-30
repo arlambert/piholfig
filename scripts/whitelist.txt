@@ -116,6 +116,8 @@ edge-chat.facebook.com
 6-edge-chat.facebook.com
 mqtt-mini.facebook.com
 edge-mqtt.facebook.com
+b-api.facebook.com
+star-mini.c10r.facebook.com
 
 # Plex
 plex.tv
