@@ -52,7 +52,6 @@ eds.xboxlive.com
 www.xboxlive.com
 v10.vortex-win.data.microsoft.com
 settings-win.data.microsoft.com
-# https://www.reddit.com/r/pihole/comments/a00w24/ive_created_a_small_stupid_pihole_configuration/eae9nno/
 fe2.update.microsoft.com
 au.download.windowsupdate.com
 download.windowsupdate.com
@@ -150,24 +149,13 @@ gravatar.com
 thetvdb.com
 themoviedb.com
 
-# Sonarr
-services.sonarr.tv
-skyhook.sonarr.tv
-download.sonarr.tv
-apt.sonarr.tv
-forums.sonarr.tv
-
-# Placehold.it - Image placeholders often used during web design
-placehold.it
-placeholdit.imgix.net
+# Correios
+dmd.metaservices.microsoft.com
 
 # Dropbox
 dl.dropboxusercontent.com
 ns1.dropbox.com
 ns2.dropbox.com
-
-# Images on marketwatch
-s.marketwatch.com
 
 # Apple music, if guests using this thing are visiting
 itunes.apple.com
@@ -186,14 +174,7 @@ cf-st.sc-cdn.net
 # Nvidia
 gfwsl.geforce.com
 
-# Videos in times.com and nydailynews.com
-delivery.vidible.tv
-img.vidible.tv
-videos.vidible.tv
-edge.api.brightcove.com
-cdn.vidible.tv
-
-# Bing maps platform :joy:
+# Bing maps platform
 dev.virtualearth.net
 ecn.dev.virtualearth.net
 t0.ssl.ak.dynamic.tiles.virtualearth.net
@@ -217,13 +198,13 @@ settings-win.data.microsoft.com
 v10.vortex-win.data.microsoft.com
 v20.vortex-win.data.microsoft.com
 
-## Amit's additions
-
 # Ali Express
 ae01.alicdn.com
 
-# Twitter
+# Shorten Sites
 t.co
+youtu.be
+bit.ly
 
 # Google
 ssl.gstatic.com
