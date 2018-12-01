@@ -211,3 +211,6 @@ ae01.alicdn.com
 
 # Google
 ssl.gstatic.com
+
+# Hax
+thepiratebay.org
